@@ -1,0 +1,6 @@
+[submodule "submodules/py-tools"]
+	path = submodules/py-tools
+	url = git@github.com:DeepWaterExploration/py-tools.git
+[submodule "py-tools"]
+	path = py-tools
+	url = git@github.com:DeepWaterExploration/py-tools.git

@@ -21,8 +21,8 @@ def parse_args():
     # model and dataset
     parser.add_argument('--model', type=str, default='fast_scnn',
                         help='model name (default: fast_scnn)')
-    parser.add_argument('--dataset', type=str, default='citys',
-                        help='dataset name (default: citys)')
+    parser.add_argument('--dataset', type=str, default='suim',
+                        help='dataset name (default: suim)')
     parser.add_argument('--base-size', type=int, default=1024,
                         help='base image size')
     parser.add_argument('--crop-size', type=int, default=768,
