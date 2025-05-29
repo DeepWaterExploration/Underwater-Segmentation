@@ -14,6 +14,8 @@ from utils.loss import MixSoftmaxCrossEntropyLoss, MixSoftmaxCrossEntropyOHEMLos
 from utils.lr_scheduler import LRScheduler
 from utils.metric import SegmentationMetric
 
+from torch.utils.tensorboard import SummaryWriter
+
 
 def parse_args():
     """Training Options for Segmentation Experiments"""
@@ -118,9 +120,14 @@ class Trainer(object):
 
         self.best_pred = 0.0
 
+        current_time = time.strftime('%Y-%m-%d_%H-%M-%S')
+        log_dir = os.path.join('runs', f'{args.model}_{args.dataset}_{current_time}')
+        self.writer = SummaryWriter(log_dir=log_dir)
+
     def train(self):
         cur_iters = 0
         start_time = time.time()
+
         for epoch in range(self.args.start_epoch, self.args.epochs):
             self.model.train()
 
@@ -141,9 +148,15 @@ class Trainer(object):
 
                 cur_iters += 1
                 if cur_iters % 10 == 0:
-                    print('Epoch: [%2d/%2d] Iter [%4d/%4d] || Time: %4.4f sec || lr: %.8f || Loss: %.4f' % (
-                        epoch, args.epochs, i + 1, len(self.train_loader),
-                        time.time() - start_time, cur_lr, loss.item()))
+                    # print('Epoch: [%2d/%2d] Iter [%4d/%4d] || Time: %4.4f sec || lr: %.8f || Loss: %.4f' % (
+                    #     epoch, args.epochs, i + 1, len(self.train_loader),
+                    #     time.time() - start_time, cur_lr, loss.item()))
+                    
+                    self.writer.add_scalar('Loss/train', loss.item(), cur_iters)
+                    self.writer.add_scalar('LearningRate', cur_lr, cur_iters)
+                 
+                    
+                    
 
             if self.args.no_val:
                 # save every epoch
